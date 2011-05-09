@@ -31,6 +31,20 @@ def remove_nbsp_and_strip(s):
     """remove &nbsp; and strip"""
     return s.replace('&nbsp;','').strip()
 
+def is_value_table(rows):
+
+    if not rows:
+        return False
+
+    if len(rows) < 2:
+        return False
+
+    if len(rows[0]) < 5:
+        # assume if # of cols under 5, u don't need a graph for it.
+        return False
+
+    return True
+
 def analyze_tbody(tbody):
     """remove unmeaningful rows and guessing header ...
     """
@@ -55,7 +69,8 @@ def analyze_tbody(tbody):
                  for row in rows
                  if len(row) >= len_limit ]
 
-    if rows and len(rows) >= 2:
+
+    if is_value_table(rows):
 
         # distinguish head and data part
         head = rows[0]
@@ -101,10 +116,13 @@ def prune(data, max_data_size=8):
 
 
 def create_chart_url(data, title=''):
+    if not data:
+        return
+
     head,rows,upscale = data
 
     if not rows or len(rows) < 2:
-        return None
+        return
 
     width = 800
     height = 350
@@ -232,6 +250,8 @@ class MainHandler(webapp.RequestHandler):
 </textarea><br />
 <input type=submit />
 </form>
+</div>
+<div><a href="http://github.com/flow3r/table2chart"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://d3nwyuy0nl342s.cloudfront.net/img/e6bef7a091f5f3138b8cd40bc3e114258dd68ddf/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub"></a>
 </div>
 </body>
 </html>
