@@ -1,0 +1,30 @@
+application: table2chart
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /files
+  static_dir: files
+
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+
+- url: /_ah/mail/bot@.*app-id\.appspotmail\.com
+  script: table2chart.py
+  login: admin
+
+- url: .*
+  script: table2chart.py
+
+
+skip_files:
+- ^(.*/)?\..*
+- ^(.*/)?.*\.txt$
+- ^(.*/)?.*\.pyc$
+- ^(.*/)?.*public\.py$
+- ^(.*/)?.*\README$
+
+inbound_services:
+- mail
